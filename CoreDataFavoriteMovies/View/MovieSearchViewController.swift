@@ -54,7 +54,7 @@ private extension MovieSearchViewController {
         datasource = UITableViewDiffableDataSource<Int, APIMovie>(tableView: tableView) { tableView, indexPath, movie in
             let cell = tableView.dequeueReusableCell(withIdentifier: MovieTableViewCell.reuseIdentifier) as! MovieTableViewCell
             cell.update(with: movie) {
-                self.toggleFavorite(movie)
+                self.toggleFavorite(movie, cell)
             }
             return cell
         }
@@ -79,10 +79,13 @@ private extension MovieSearchViewController {
         datasource?.apply(snapshot, animatingDifferences: true)
         tableView.backgroundView = movies.isEmpty ? backgroundView : nil
     }
-
-    func toggleFavorite(_ movie: APIMovie) {
-        print("SEE! I knew you liked \(movie.title)!")
-        // TODO: Save movie to core data so it can become a favorite
+    
+    func toggleFavorite(_ movie: APIMovie, _ cell: MovieTableViewCell) {
+        if cell.isFavorited {
+            movieController.createFavoriteMovie(movie)
+            
+        }
+        cell.toggleFavorite()
     }
     
     func reload(_ movie: APIMovie) {

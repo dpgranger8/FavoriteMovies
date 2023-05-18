@@ -7,11 +7,19 @@
 
 import Foundation
 
+struct SearchResponse: Decodable {
+    let movies: [APIMovie]
+    
+    enum CodingKeys: String, CodingKey {
+        case movies = "Search"
+    }
+}
+
 struct APIMovie: Codable, Identifiable, Hashable {
     let title: String
     let year: String
     let imdbID: String
-    let posterURL: URL?
+    let posterURLString: String
     
     var id: String { imdbID }
 
@@ -19,7 +27,21 @@ struct APIMovie: Codable, Identifiable, Hashable {
         case title = "Title"
         case year = "Year"
         case imdbID
-        case posterURL = "Poster"
+        case posterURLString = "Poster"
     }
+}
 
+extension APIMovie {
+    var posterURL: URL? {
+        return URL(string: posterURLString)
+    }
+}
+
+extension APIMovie {
+    init(from movie: Movie) {
+        self.title = movie.title ?? ""
+        self.year = movie.year ?? ""
+        self.imdbID = movie.imdbID ?? ""
+        self.posterURLString = movie.posterURL ?? ""
+    }
 }

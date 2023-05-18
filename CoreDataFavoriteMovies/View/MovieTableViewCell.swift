@@ -17,7 +17,8 @@ class MovieTableViewCell: UITableViewCell {
     @IBOutlet weak var yearLabel: UILabel!
     @IBOutlet weak var heartButton: UIButton!
 
-    var onFavorite: (() -> Void)?
+    var isFavorited: Bool = false
+    var onFavorite: (() -> Void)? // I have no clue what this does
     
     private var apiMovie: APIMovie?
     
@@ -41,7 +42,16 @@ class MovieTableViewCell: UITableViewCell {
     
     func setUnFavorite() {
         heartButton.setImage(heart, for: .normal)
-        heartButton.tintColor = .gray
+        heartButton.tintColor = .systemBlue
+    }
+    
+    func toggleFavorite() {
+        isFavorited = !isFavorited
+        if isFavorited {
+            setFavorite()
+        } else {
+            setUnFavorite()
+        }
     }
     
     @IBAction func favoriteButtonPressed() {
